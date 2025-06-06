@@ -11,13 +11,13 @@ const apiRoutes = require("./routers/index.js");
 const allowedOrigins = [
     "http://localhost:5173",
     "http://localhost:5174",
-    // nếu có thể, thêm các domain production hoặc staging tại đây
+    "https://tramtrithuc-eq4o.vercel.app", // Thêm domain production của frontend
 ];
 
 // Cấu hình CORS
 const corsOptions = {
     origin: function (origin, callback) {
-        // Nếu không có origin (ví dụ: request từ Postman) thì cho phép
+        // Cho phép request không có origin (như Postman) và các origin trong allowedOrigins
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
@@ -35,6 +35,7 @@ const io = socketIo(server, {
     cors: {
         origin: allowedOrigins,
         methods: ["GET", "POST"],
+        credentials: true, // Cho phép gửi credentials qua WebSocket
     },
 });
 
@@ -94,4 +95,3 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
